@@ -24,7 +24,7 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
+//        Route::middleware('client_credentials');
         parent::boot();
     }
 
