@@ -17,4 +17,5 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'user'], function () {
     Route::post('login', 'UserController@Login');
+    Route::post('regist', 'UserController@Regist');
 });

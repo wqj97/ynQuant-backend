@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,10 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot ()
     {
-        \Carbon\Carbon::setLocale('zh');
-        \DB::listen(function ($query) {
-            Log::info($query->sql . '，耗时：' . $query->time . 'ms' . "\r\n参数:", $query->bindings);
-        });
+        Carbon::setLocale('zh');
+//        \Route::middleware('client_credentials');
+//        \DB::listen(function ($query) {
+//            Log::info($query->sql . '，耗时：' . $query->time . 'ms' . "\r\n参数:", $query->bindings);
+//        });
     }
 
     /**

@@ -24,8 +24,8 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-//        Route::middleware('client_credentials');
         parent::boot();
+
     }
 
     /**
@@ -69,5 +69,7 @@ class RouteServiceProvider extends ServiceProvider
              ->middleware('api')
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
+        \Route::middleware('client');
+
     }
 }

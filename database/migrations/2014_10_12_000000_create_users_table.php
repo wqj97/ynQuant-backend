@@ -15,9 +15,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('phone')->unique();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
+            $table->enum('skills', ['金融新手', '略有了解', '从业人员'])->default('金融新手');
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();

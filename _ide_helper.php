@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.6.13 on 2018-03-28 04:13:32.
+ * Generated for Laravel 5.6.13 on 2018-03-31 05:41:55.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -2098,7 +2098,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function if ($name, $callback)
         {
-            \Illuminate\View\Compilers\BladeCompiler::if ($name, $callback);
+            \Illuminate\View\Compilers\BladeCompiler::if($name, $callback);
         }
 
         /**
@@ -2137,7 +2137,7 @@ namespace Illuminate\Support\Facades {
          */
         public static function include ($path, $alias = null)
         {
-            \Illuminate\View\Compilers\BladeCompiler::include ($path, $alias);
+            \Illuminate\View\Compilers\BladeCompiler::include($path, $alias);
         }
 
         /**

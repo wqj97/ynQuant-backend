@@ -11,6 +11,6 @@
 |
 */
 
-Route::group(['prefix' => 'news'], function () {
+Route::group(['middleware' => 'auth:api', 'prefix' => 'news'], function () {
     Route::get('list', 'NewsController@List');
 });
