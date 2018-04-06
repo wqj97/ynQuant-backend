@@ -13,7 +13,7 @@ class NewsController extends Controller
      */
     public function List ()
     {
-        return News::selectRaw('*')
+        return News::selectRaw('id,title,content,news_time,created_at')
             ->selectRaw('Date(news_time) as date')
             ->orderByDesc('news_time')
             ->paginate(15)

@@ -9,6 +9,10 @@ class News extends Model
 {
     use SoftDeletes;
 
+    protected $casts = [
+        'analysis' => 'json'
+    ];
+
     /**
      * 新闻所有的评论
      */

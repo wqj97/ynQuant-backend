@@ -20,6 +20,10 @@ class Comments extends Model
         'likes'
     ];
 
+    protected $hidden = [
+        'deleted_at'
+    ];
+
     public function user_info ()
     {
         return $this->belongsTo('App\User', 'user_id');
