@@ -15,6 +15,24 @@ class NewsController extends Controller
     {
         return News::selectRaw('*')
             ->selectRaw('Date(news_time) as date')
-            ->orderByDesc('news_time')->paginate(15)->groupBy('date');
+            ->orderByDesc('news_time')
+            ->paginate(15)
+            ->groupBy('date');
+    }
+
+    /**
+     * 返回新闻详情
+     * @param Request $request
+     * @return mixed|static
+     */
+    public function NewsDetail (Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required'
+        ]);
+
+        return \Cache::remember("news_{$request->id}", 1, function () use ($request) {
+            return News::with('comments')->find($request->id);
+        });
     }
 }

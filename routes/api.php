@@ -11,6 +11,7 @@
 |
 */
 
-Route::group(['middleware' => 'auth:api', 'prefix' => 'news'], function () {
-    Route::get('list', 'NewsController@List');
+Route::group(['prefix' => 'news'], function () {
+    Route::get('', 'NewsController@NewsDetail'); // 获取新闻详情(评论, 关联新闻)
+    Route::get('list', 'NewsController@List'); // 获取新闻列表
 });

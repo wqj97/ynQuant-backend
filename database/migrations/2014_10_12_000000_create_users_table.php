@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('password');
+            $table->string('head_url')->dafault('/default_head.jpg');
             $table->enum('skills', ['金融新手', '略有了解', '从业人员'])->default('金融新手');
             $table->rememberToken();
             $table->softDeletes();

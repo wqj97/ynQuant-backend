@@ -26,6 +26,7 @@ class UserController extends Controller
             'password' => $request->password
         ])) {
             $user = Auth::user();
+            $user->makeVisible(['email', 'phone']);
             $user->access_token = $user->createToken('ynQuant')->accessToken;
             return $user;
         } else {
@@ -59,7 +60,7 @@ class UserController extends Controller
             'skills' => $request->skills
         ]);
         $user->token = $user->createToken('ynQuant')->accessToken;
-
+        $user->makeVisible(['email', 'phone']);
         return $user;
     }
 }

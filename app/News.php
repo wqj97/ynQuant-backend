@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -10,8 +9,11 @@ class News extends Model
 {
     use SoftDeletes;
 
-//    public function getNewsTimeAttribute ()
-//    {
-//        return $this->attributes['news_time'];
-//    }
+    /**
+     * 新闻所有的评论
+     */
+    public function comments ()
+    {
+        return $this->hasMany('App\Comments', 'news_id');
+    }
 }
