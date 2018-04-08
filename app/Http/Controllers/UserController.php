@@ -21,6 +21,10 @@ class UserController extends Controller
             'phone' => 'required',
             'password' => 'required'
         ]);
+        if (!User::where('phone', $request->phone)->exists()){
+            throw new AuthenticationException('手机号不存在');
+        }
+
         if (Auth::attempt([
             'phone' => $request->phone,
             'password' => $request->password
@@ -30,7 +34,7 @@ class UserController extends Controller
             $user->access_token = $user->createToken('ynQuant')->accessToken;
             return $user;
         } else {
-            throw new AuthenticationException();
+            throw new AuthenticationException('密码错误');
         }
     }
 
@@ -50,7 +54,9 @@ class UserController extends Controller
         ]);
 
         if (User::where('phone', $request->phone)->exists()) {
-            return response('手机号已存在', 403);
+            return response()->json('手机号已存在', 403);
+        } elseif (User::Where('name', $request->name)->exists()) {
+            return response()->json('用户名已存在', 403);
         }
 
         $user = User::create([

@@ -52,6 +52,6 @@ class Handler extends ExceptionHandler
 
     public function unauthenticated ($request, AuthenticationException $exception)
     {
-        return response()->json('权限不足', 403);
+        return response()->json($exception->getMessage(), 403);
     }
 }
