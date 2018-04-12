@@ -2,84 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Knowlege;
+use App\Knowledge;
+use App\KnowledgeViews;
 use Illuminate\Http\Request;
 
 class KnowlegeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * 列出知识点
+     * @param Request $request
+     * @return \Illuminate\Support\Collection
      */
-    public function create()
+    public function List (Request $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Knowlege  $knowlege
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Knowlege $knowlege)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Knowlege  $knowlege
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Knowlege $knowlege)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Knowlege  $knowlege
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Knowlege $knowlege)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Knowlege  $knowlege
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Knowlege $knowlege)
-    {
-        //
+        if ($request->has('parent')) {
+            if ($user = \Auth::guard('api')->user()) {
+                KnowledgeViews::create(['knowledge_id' => $request->parent, 'user_id' => $user->id]);
+            } else {
+                KnowledgeViews::create(['knowledge_id' => $request->parent]);
+            }
+            return Knowledge::withCount('comments')->where('parent', $request->parent)->get();
+        } else {
+            return Knowledge::withCount('views')->where('parent', null)->get();
+        }
     }
 }

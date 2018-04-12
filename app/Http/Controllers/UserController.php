@@ -32,7 +32,7 @@ class UserController extends Controller
         ])) {
             $user = Auth::user();
             $user->makeVisible(['email', 'phone']);
-            $user->access_token = $user->createToken('ynQuant')->accessToken;
+            $user->access_token = $user->createToken('ynQuant', ['*'])->accessToken;
             return $user;
         } else {
             throw new AuthenticationException('密码错误');
@@ -71,7 +71,7 @@ class UserController extends Controller
 
         if (User::where('phone', $request->phone)->exists()) {
             return response()->json('手机号已存在', 403);
-        } elseif (User::Where('name', $request->name)->exists()) {
+        } elseif (User::where('name', $request->name)->exists()) {
             return response()->json('用户名已存在', 403);
         }
 

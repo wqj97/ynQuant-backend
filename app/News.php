@@ -20,4 +20,13 @@ class News extends Model
     {
         return $this->hasMany('App\Comments', 'news_id');
     }
+
+    /**
+     * 查看次数
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function views ()
+    {
+        return $this->hasMany('App\NewsViews', 'news_id');
+    }
 }

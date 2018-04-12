@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKnowlegesTable extends Migration
+class CreateNewsViewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateKnowlegesTable extends Migration
      */
     public function up()
     {
-        Schema::create('knowleges', function (Blueprint $table) {
+        Schema::create('news_views', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('content', 1000);
-            $table->unsignedInteger('parent')->nullable();
+            $table->unsignedInteger('news_id');
+            $table->foreign('news_id')->references('id')->on('news');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +30,6 @@ class CreateKnowlegesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('knowleges');
+        Schema::dropIfExists('news_views');
     }
 }

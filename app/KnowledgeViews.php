@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Likes extends Model
+class KnowledgeViews extends Model
 {
     protected $guarded = [];
 }
