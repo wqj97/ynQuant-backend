@@ -6,7 +6,7 @@ use App\Knowledge;
 use App\KnowledgeViews;
 use Illuminate\Http\Request;
 
-class KnowlegeController extends Controller
+class KnowledgeController extends Controller
 {
 
     /**

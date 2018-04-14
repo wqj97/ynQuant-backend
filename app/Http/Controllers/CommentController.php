@@ -24,7 +24,7 @@ class CommentController extends Controller
             return response()->json('success', 200);
         } else {
             Likes::create(['comment_id' => $request->id, 'user_id' => $request->user()->id]);
-            return response()->json('success', 201);
+            return response()->json('created', 201);
         }
     }
 }

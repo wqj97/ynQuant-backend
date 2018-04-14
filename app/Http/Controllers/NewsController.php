@@ -38,11 +38,9 @@ class NewsController extends Controller
         } else {
             NewsViews::create(['news_id' => $request->id]);
         }
-        return \Cache::remember("news_{$request->id}", 1, function () use ($request) {
-            $news = News::withCount('views')->find($request->id);
-            $news->comments = $news->comments()->orderByDesc('id')->limit(10)->get();
-            return $news;
-        });
+        $news = News::withCount('views')->find($request->id);
+        $news->comments = $news->comments()->orderByDesc('id')->limit(10)->get();
+        return $news;
     }
 
     /**
@@ -56,9 +54,7 @@ class NewsController extends Controller
             'id' => 'required',
             'page' => 'required'
         ]);
-        return \Cache::remember("news_{$request->id}_{$request->page}", 1, function () use ($request) {
-            $comments = News::find($request->id)->comments()->orderByDesc('id')->paginate();
-            return $comments;
-        });
+        $comments = News::find($request->id)->comments()->orderByDesc('id')->paginate();
+        return $comments;
     }
 }

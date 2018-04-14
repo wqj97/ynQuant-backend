@@ -9,7 +9,11 @@ class Comments extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-      'user_id', 'news_id', 'knowledge_id', 'content', 'analysis'
+        'user_id', 'news_id', 'knowledge_id', 'content', 'analysis'
+    ];
+
+    protected $casts = [
+        'current_user_liked_count' => 'boolean'
     ];
 
     protected $with = [
@@ -17,7 +21,7 @@ class Comments extends Model
     ];
 
     protected $withCount = [
-        'likes'
+        'likes', 'current_user_liked'
     ];
 
     protected $hidden = [
@@ -32,5 +36,10 @@ class Comments extends Model
     public function likes ()
     {
         return $this->hasMany('App\Likes', 'comment_id');
+    }
+
+    public function current_user_liked ()
+    {
+        return $this->hasOne('App\Likes', 'comment_id')->where('user_id', \Auth::guard('api')->user()->id ?? null);
     }
 }

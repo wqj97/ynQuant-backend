@@ -18,7 +18,7 @@ Route::group(['prefix' => 'news'], function () {
 });
 
 Route::group(['prefix' => 'knowledge'], function () {
-   Route::get('', 'KnowlegeController@List'); // 获取知识点
+   Route::get('', 'KnowledgeController@List'); // 获取知识点
 });
 
 Route::group(['prefix' => 'comment', 'middleware' => ['auth:api']], function () {
