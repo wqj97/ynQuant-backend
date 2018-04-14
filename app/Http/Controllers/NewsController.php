@@ -38,7 +38,7 @@ class NewsController extends Controller
         } else {
             NewsViews::create(['news_id' => $request->id]);
         }
-        $news = News::withCount('views')->find($request->id);
+        $news = News::withCount('views', 'comments')->find($request->id);
         $news->comments = $news->comments()->orderByDesc('id')->limit(10)->get();
         return $news;
     }

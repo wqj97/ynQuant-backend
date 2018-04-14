@@ -13,7 +13,7 @@ class Knowledge extends Model
      * 知识点查看次数
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function Views ()
+    public function views ()
     {
         return $this->hasMany('App\knowledgeViews', 'knowledge_id');
     }
@@ -25,5 +25,15 @@ class Knowledge extends Model
     public function comments ()
     {
         return $this->hasMany('App\Comments', 'knowledge_id');
+    }
+
+    /**
+     * 阅读标签
+     * @return Knowledge|\Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function userPageTag ()
+    {
+        return $this->hasOne('App\KnowledgesPageViewRecord', 'knowledge_id')
+            ->where('user_id', \Auth::guard('api')->user()->id ?? null);
     }
 }

@@ -18,7 +18,10 @@ Route::group(['prefix' => 'news'], function () {
 });
 
 Route::group(['prefix' => 'knowledge'], function () {
-   Route::get('', 'KnowledgeController@List'); // 获取知识点
+    Route::get('', 'KnowledgeController@List'); // 获取知识点
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('pageTag', 'KnowledgeController@pageTag'); // 知识点观看记录
+    });
 });
 
 Route::group(['prefix' => 'comment', 'middleware' => ['auth:api']], function () {

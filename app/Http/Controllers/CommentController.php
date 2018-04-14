@@ -18,7 +18,7 @@ class CommentController extends Controller
         $this->validate($request, [
             'id' => 'required'
         ]);
-        $like = Likes::where('user_id', $request->user()->id);
+        $like = Likes::where('comment_id', $request->id)->where('user_id', $request->user()->id);
         if ($like->exists()) {
             $like->delete();
             return response()->json('success', 200);

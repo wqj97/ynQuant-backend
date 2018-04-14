@@ -15,9 +15,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot ()
     {
         Carbon::setLocale('zh');
-//        \DB::listen(function ($query) {
-//            \Log::info($query->sql . '，耗时：' . $query->time . 'ms' . "\r\n参数:", $query->bindings);
-//        });
+        \DB::listen(function ($query) {
+            \Log::info($query->sql . '，耗时：' . $query->time . 'ms' . "\r\n参数:", $query->bindings);
+        });
     }
 
     /**
