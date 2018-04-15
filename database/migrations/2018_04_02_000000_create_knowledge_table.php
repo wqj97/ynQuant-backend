@@ -19,6 +19,8 @@ class CreateKnowledgeTable extends Migration
             $table->string('content', 1000);
             $table->unsignedInteger('parent')->nullable();
             $table->unsignedTinyInteger('type');
+            $table->unsignedTinyInteger('page');
+            $table->string('difficulty')->default('初学者');
             $table->timestamps();
             $table->softDeletes();
         });

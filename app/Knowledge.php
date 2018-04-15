@@ -36,4 +36,22 @@ class Knowledge extends Model
         return $this->hasOne('App\KnowledgesPageViewRecord', 'knowledge_id')
             ->where('user_id', \Auth::guard('api')->user()->id ?? null);
     }
+
+    /**
+     * 子知识点
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function total () {
+        return $this->hasMany('App\Knowledge', 'parent');
+    }
+
+    /**
+     * 完成人数
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function finished ()
+    {
+        return $this->hasMany('App\KnowledgesPageViewRecord', 'knowledge_id')
+            ->whereRaw('page = `total_count`');
+    }
 }

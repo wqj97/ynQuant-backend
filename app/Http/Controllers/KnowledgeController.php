@@ -13,24 +13,30 @@ class KnowledgeController extends Controller
     /**
      * 列出知识点
      * @param Request $request
-     * @return \Illuminate\Support\Collection
+     * @return mixed
      */
     public function List (Request $request)
     {
-        $user = \Auth::guard('api')->user();
-        if ($request->has('parent')) {
-            if ($user) {
-                KnowledgeViews::create(['knowledge_id' => $request->parent, 'user_id' => $user->id]);
+        $this->validate($request, [
+            'type' => 'required_without:parent'
+        ]);
+        return \Cache::remember('knowledgeList', 1, function () use ($request) {
+            $user = \Auth::guard('api')->user();
+            if ($request->has('parent')) {
+                if ($user) {
+                    KnowledgeViews::create(['knowledge_id' => $request->parent, 'user_id' => $user->id]);
+                } else {
+                    KnowledgeViews::create(['knowledge_id' => $request->parent]);
+                }
+                return Knowledge::withCount('comments')->where('parent', $request->parent)->get();
             } else {
-                KnowledgeViews::create(['knowledge_id' => $request->parent]);
+                $knowledge = Knowledge::withCount(['views', 'total', 'finished'])->where('parent', null)->where('type', $request->type);
+                if ($user) {
+                    return $knowledge->with(['userPageTag'])->get();
+                }
+                return $knowledge->get();
             }
-            return Knowledge::withCount('comments')->where('parent', $request->parent)->get();
-        } else {
-            if ($user) {
-                return Knowledge::withCount(['views'])->with(['userPageTag'])->where('parent', null)->get();
-            }
-            return Knowledge::withCount('views')->where('parent', null)->get();
-        }
+        });
     }
 
     public function pageTag (Request $request)
@@ -39,13 +45,11 @@ class KnowledgeController extends Controller
             'id' => 'required',
             'page' => 'required'
         ]);
-        KnowledgesPageViewRecord::where('user_id', $request->user()->id)
-            ->where('knowledge_id', $request->id)
-            ->updateOrInsert([
-                'knowledge_id' => $request->id,
-                'user_id' => $request->user()->id,
-                'page' => $request->page
-            ]);
+        KnowledgesPageViewRecord::updateOrCreate([
+            'knowledge_id' => $request->id,
+            'user_id' => $request->user()->id], [
+            'page' => $request->page
+        ]);
         return response()->json('success');
     }
 }
