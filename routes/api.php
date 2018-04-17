@@ -26,4 +26,5 @@ Route::group(['prefix' => 'knowledge'], function () {
 
 Route::group(['prefix' => 'comment', 'middleware' => ['auth:api']], function () {
     Route::get('like', 'CommentController@Like'); // 点赞
+    Route::post('', 'CommentController@Create'); // 创建评论
 });
