@@ -15,7 +15,7 @@ class Knowledge extends Model
      */
     public function views ()
     {
-        return $this->hasMany('App\knowledgeViews', 'knowledge_id');
+        return $this->hasMany('App\KnowledgeView', 'knowledge_id');
     }
 
     /**

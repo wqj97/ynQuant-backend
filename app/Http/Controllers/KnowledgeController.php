@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Knowledge;
 use App\KnowledgesPageViewRecord;
-use App\KnowledgeViews;
+use App\KnowledgeView;
 use Illuminate\Http\Request;
 
 class KnowledgeController extends Controller
@@ -24,9 +24,9 @@ class KnowledgeController extends Controller
             $user = \Auth::guard('api')->user();
             if ($request->has('parent')) {
                 if ($user) {
-                    KnowledgeViews::create(['knowledge_id' => $request->parent, 'user_id' => $user->id]);
+                    KnowledgeView::create(['knowledge_id' => $request->parent, 'user_id' => $user->id]);
                 } else {
-                    KnowledgeViews::create(['knowledge_id' => $request->parent]);
+                    KnowledgeView::create(['knowledge_id' => $request->parent]);
                 }
                 return Knowledge::withCount('comments')->where('parent', $request->parent)->get();
             } else {
