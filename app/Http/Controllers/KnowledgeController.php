@@ -110,7 +110,7 @@ class KnowledgeController extends Controller
             'content' => 'required',
             'parent' => 'required'
         ]);
-        if ($request->parent === 0) {
+        if ($request->parent == 0) {
             Knowledge::create([
                 'title' => $request->title,
                 'content' => $request->post('content'),
