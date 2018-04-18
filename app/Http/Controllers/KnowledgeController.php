@@ -92,4 +92,46 @@ class KnowledgeController extends Controller
         $comments = Knowledge::find($request->id)->comments()->orderByDesc('id')->paginate();
         return $comments;
     }
+
+    /**
+     * 显示创建知识点页面
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function ShowCreate ()
+    {
+        $root_knowledges = Knowledge::where('parent', null)->get();
+        return view('create_knowledge', compact('root_knowledges'));
+    }
+
+    public function SaveCreate (Request $request)
+    {
+        $this->validate($request, [
+            'title' => 'required',
+            'content' => 'required',
+            'parent' => 'required'
+        ]);
+        if ($request->parent === 0) {
+            Knowledge::create([
+                'title' => $request->title,
+                'content' => $request->post('content'),
+                'parent' => null
+            ]);
+            return redirect()->action('KnowledgeController@ShowCreate');
+        }
+        Knowledge::create([
+            'title' => $request->title,
+            'content' => $request->post('content'),
+            'parent' => $request->parent
+        ]);
+        return redirect()->action('KnowledgeController@ShowCreate');
+    }
+
+    public function showKnowledgeWeb (Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required'
+        ]);
+        $content = Knowledge::find($request->id)->content;
+        return view('show_knowledge', compact('content'));
+    }
 }

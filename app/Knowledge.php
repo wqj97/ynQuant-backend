@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Knowledge extends Model
 {
     use SoftDeletes;
-
+    public $guarded = [];
     /**
      * 知识点查看次数
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
