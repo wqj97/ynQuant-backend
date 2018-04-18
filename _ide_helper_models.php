@@ -22,7 +22,7 @@ namespace App{
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Comments[] $comments
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Comments[] $comments
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\NewsViews[] $views
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\News onlyTrashed()

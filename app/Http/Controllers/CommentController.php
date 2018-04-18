@@ -28,28 +28,4 @@ class CommentController extends Controller
             return response()->json('created', 201);
         }
     }
-
-    /**
-     * 创建评论
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function Create (Request $request)
-    {
-        $this->validate($request, [
-            'news_id' => 'required_without:knowledge_id',
-            'knowledge_id' => 'required_without:news_id',
-            'content' => 'required'
-        ]);
-        $comment = new Comments();
-        $comment->content = $request->post('content');
-        $comment->user_id = $request->user()->id;
-        if ($request->has('news_id')) {
-            $comment->news_id = $request->news_id;
-        } else {
-            $comment->knowledge_id = $request->knowledge_id;
-        }
-        $comment->save();
-        return response()->json('created', 201);
-    }
 }

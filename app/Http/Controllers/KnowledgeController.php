@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Comments;
 use App\Knowledge;
 use App\KnowledgesPageViewRecord;
 use App\KnowledgeView;
+use App\News;
 use Illuminate\Http\Request;
 
 class KnowledgeController extends Controller
@@ -20,7 +22,7 @@ class KnowledgeController extends Controller
         $this->validate($request, [
             'type' => 'required_without:parent'
         ]);
-        return \Cache::remember('knowledgeList', 1, function () use ($request) {
+        return \Cache::remember("knowledgeList_{$request->type}_{$request->parent}", 1, function () use ($request) {
             $user = \Auth::guard('api')->user();
             if ($request->has('parent')) {
                 if ($user) {
@@ -39,6 +41,11 @@ class KnowledgeController extends Controller
         });
     }
 
+    /**
+     * 记录知识点
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function pageTag (Request $request)
     {
         $this->validate($request, [
@@ -51,5 +58,38 @@ class KnowledgeController extends Controller
             'page' => $request->page
         ]);
         return response()->json('success');
+    }
+
+    /**
+     * 创建笔记
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function CreateNote (Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+            'content' => 'required'
+        ]);
+        $comment = new Comments();
+        $comment->content = $request->post('content');
+        $comment->user_id = $request->user()->id;
+        $comment->knowledge_id = $request->id;
+        $comment->save();
+        return response()->json('created', 201);
+    }
+
+    /**
+     * 知识点评论
+     * @param Request $request
+     * @return mixed
+     */
+    public function ListComments (Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required'
+        ]);
+        $comments = Knowledge::find($request->id)->comments()->orderByDesc('id')->paginate();
+        return $comments;
     }
 }

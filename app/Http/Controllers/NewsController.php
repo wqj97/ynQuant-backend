@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comments;
 use App\News;
 use App\NewsViews;
 use Illuminate\Http\Request;
@@ -48,13 +49,31 @@ class NewsController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function NewsComments (Request $request)
+    public function ListComments (Request $request)
     {
         $this->validate($request, [
-            'id' => 'required',
-            'page' => 'required'
+            'id' => 'required'
         ]);
         $comments = News::find($request->id)->comments()->orderByDesc('id')->paginate();
         return $comments;
+    }
+
+    /**
+     * 创建新闻评论
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function CreateComment (Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+            'content' => 'required'
+        ]);
+        $comment = new Comments();
+        $comment->content = $request->post('content');
+        $comment->user_id = $request->user()->id;
+        $comment->news_id = $request->id;
+        $comment->save();
+        return response()->json('created', 201);
     }
 }
