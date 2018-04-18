@@ -22,23 +22,27 @@ class KnowledgeController extends Controller
         $this->validate($request, [
             'type' => 'required_without:parent'
         ]);
-        return \Cache::remember("knowledgeList_{$request->type}_{$request->parent}", 1, function () use ($request) {
-            $user = \Auth::guard('api')->user();
-            if ($request->has('parent')) {
-                if ($user) {
-                    KnowledgeView::create(['knowledge_id' => $request->parent, 'user_id' => $user->id]);
-                } else {
-                    KnowledgeView::create(['knowledge_id' => $request->parent]);
-                }
-                return Knowledge::withCount('comments')->where('parent', $request->parent)->get();
+//        return \Cache::remember("knowledgeList_{$request->type}_{$request->parent}", 1, function () use ($request) {
+        $user = \Auth::guard('api')->user();
+        if ($request->has('parent')) {
+            if ($user) {
+                KnowledgeView::create(['knowledge_id' => $request->parent, 'user_id' => $user->id]);
             } else {
-                $knowledge = Knowledge::withCount(['views', 'total', 'finished'])->where('parent', null)->where('type', $request->type);
-                if ($user) {
-                    return $knowledge->with(['userPageTag'])->get();
-                }
-                return $knowledge->get();
+                KnowledgeView::create(['knowledge_id' => $request->parent]);
             }
-        });
+            return Knowledge::withCount('comments')
+                ->where('parent', $request->parent)
+                ->select(['id', 'title', 'parent', 'page'])
+                ->orderBy('page')
+                ->get();
+        } else {
+            $knowledge = Knowledge::withCount(['views', 'total', 'finished'])->where('parent', null)->where('type', $request->type);
+            if ($user) {
+                return $knowledge->with(['userPageTag'])->get();
+            }
+            return $knowledge->get();
+        }
+//        });
     }
 
     /**
@@ -108,22 +112,28 @@ class KnowledgeController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            'parent' => 'required'
+            'parent' => 'required',
+            'type' => 'required',
+            'page' => 'required'
         ]);
         if ($request->parent == 0) {
-            Knowledge::create([
+            $knowlege = Knowledge::create([
                 'title' => $request->title,
                 'content' => $request->post('content'),
+                'type' => $request->type,
+                'page' => $request->page,
                 'parent' => null
             ]);
-            return redirect()->action('KnowledgeController@ShowCreate');
+            return redirect('/knowledge/show?id=' . $knowlege->id);
         }
-        Knowledge::create([
+        $knowlege = Knowledge::create([
             'title' => $request->title,
             'content' => $request->post('content'),
+            'type' => $request->type,
+            'page' => $request->page,
             'parent' => $request->parent
         ]);
-        return redirect()->action('KnowledgeController@ShowCreate');
+        return redirect('/knowledge/show?id=' . $knowlege->id);
     }
 
     public function showKnowledgeWeb (Request $request)
@@ -133,5 +143,50 @@ class KnowledgeController extends Controller
         ]);
         $content = Knowledge::find($request->id)->content;
         return view('show_knowledge', compact('content'));
+    }
+
+    public function listKnowledgeWeb ()
+    {
+        return view('list_knowledge');
+    }
+
+    public function showEditKnowledgeWeb (Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required'
+        ]);
+        $knowledge = Knowledge::find($request->id);
+        $root_knowledges = Knowledge::where('parent', null)->get();
+        return view('edit_knowledge', compact('knowledge', 'root_knowledges'));
+    }
+
+    public function editKnowledgeWeb (Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+            'title' => 'required',
+            'content' => 'required',
+            'parent' => 'required',
+            'type' => 'required',
+            'page' => 'required'
+        ]);
+        if ($request->parent == 0) {
+            $knowlege = Knowledge::find($request->id)->update([
+                'title' => $request->title,
+                'content' => $request->post('content'),
+                'type' => $request->type,
+                'page' => $request->page,
+                'parent' => null
+            ]);
+            return redirect('/knowledge/show?id=' . $request->id);
+        }
+        $knowlege = Knowledge::find($request->id)->update([
+            'title' => $request->title,
+            'content' => $request->post('content'),
+            'type' => $request->type,
+            'page' => $request->page,
+            'parent' => $request->parent
+        ]);
+        return redirect('/knowledge/show?id=' . $request->id);
     }
 }

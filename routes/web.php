@@ -23,5 +23,8 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'knowledge'], function () {
     Route::get('', 'KnowledgeController@ShowCreate');
     Route::get('show', 'KnowledgeController@showKnowledgeWeb');
+    Route::get('list', 'KnowledgeController@listKnowledgeWeb');
+    Route::get('edit', 'KnowledgeController@showEditKnowledgeWeb');
+    Route::post('edit', 'KnowledgeController@editKnowledgeWeb')->name('edit_knowledge');
     Route::post('create', 'KnowledgeController@SaveCreate')->name('create_knowledge');
 });

@@ -8,33 +8,34 @@
     @include('vendor.ueditor.assets')
     <title>创建知识点</title>
     <style>
-        form label{
+        form label {
             display: block;
         }
     </style>
 </head>
 <body>
-<form action="{{route('create_knowledge')}}" method="post" enctype="application/x-www-form-urlencoded" class="form-group">
+<form action="{{route('edit_knowledge')}}" method="post" enctype="application/x-www-form-urlencoded" class="form-group">
+    <input type="hidden" name="id" value="{{$knowledge->id}}">
     <label for="">
         知识点标题:
-        <input type="text" name="title" required class="form-control">
+        <input type="text" name="title" value="{{$knowledge->title}}" required class="form-control">
     </label>
     <label for="">
         知识分类:
-        <select name="type" class="form-control">
+        <select name="type" value="{{$knowledge->type}}" class="form-control">
             <option value="0">普通知识</option>
             <option value="1">高阶知识</option>
         </select>
     </label>
     <label for="">
         这个知识点是第几页 ( 根节点随便填 ):
-        <input type="number" name="page" required class="form-control">
+        <input type="number" name="page" value="{{$knowledge->page}}" required class="form-control">
     </label>
     <label for="">
         父级知识点:
-        <select name="parent" class="form-control">
+        <select name="parent" value="{{$knowledge->parent}}" class="form-control">
             <option value="0">根知识</option>
-        @foreach($root_knowledges as $item)
+            @foreach($root_knowledges as $item)
                 <option value="{{$item->id}}">{{$item->title}}</option>
             @endforeach
         </select>
@@ -45,11 +46,11 @@
 </form>
 <!-- 编辑器容器 -->
 </body>
-<script type="text/javascript">
-  "use strict";
+<script type="text/javascript">"use strict";
+
   var ue = UE.getEditor('container');
-    {{--ue.ready(function () {--}}
-    {{--ue.execCommand('serverparam', '_token', '{{ csrf_token() }}'); // 设置 CSRF token.--}}
-    {{--});--}}
+  ue.ready(function () {
+    ue.setContent('{!! $knowledge->content !!}')
+  })
 </script>
 </html>
