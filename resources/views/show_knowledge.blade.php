@@ -8,7 +8,9 @@
             margin: 0;
             padding: 0;
         }
-
+        p{
+            margin-left: 0 !important;
+        }
         img {
             max-width: 100%;
         }
