@@ -20,7 +20,7 @@ class CreateCommentsTable extends Migration
             $table->unsignedInteger('news_id')->nullable();
             $table->foreign('news_id')->references('id')->on('news');
             $table->unsignedInteger('knowledge_id')->nullable();
-            $table->foreign('knowledge_id')->references('id')->on('knowleges');
+            $table->foreign('knowledge_id')->references('id')->on('knowledge');
             $table->text('content');
             $table->json('analysis')->nullable();
             $table->timestamps();

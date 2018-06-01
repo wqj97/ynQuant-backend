@@ -30,9 +30,10 @@ class KnowledgeController extends Controller
             } else {
                 KnowledgeView::create(['knowledge_id' => $request->parent]);
             }
-            return Knowledge::withCount('comments')
-                ->where('parent', $request->parent)
+            return Knowledge::
+                where('parent', $request->parent)
                 ->select(['id', 'title', 'parent', 'page'])
+                ->withCount('comments')
                 ->orderBy('page')
                 ->get();
         } else {
